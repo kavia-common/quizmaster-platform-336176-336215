@@ -1,6 +1,5 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MemoryRouter } from "react-router-dom";
 import App from "./App";
 
 test("renders QuizMaster brand", () => {
@@ -13,23 +12,26 @@ test("results page can render attempt details empty state", async () => {
   // Ensure deterministic Results page behavior for this test.
   window.localStorage.removeItem("quizmaster.results.v1");
 
-  // Use MemoryRouter so the test controls the initial URL and navigation is reliable.
-  // This also reduces act() warnings caused by async router updates.
-  render(
-    <MemoryRouter initialEntries={["/"]}>
-      <App />
-    </MemoryRouter>
-  );
+  // App already includes <BrowserRouter>. In tests, do NOT wrap <App/> in another router
+  // (e.g. MemoryRouter), or React Router will throw nested-router errors.
+  //
+  // Instead, control the initial route via the History API before rendering.
+  window.history.pushState({}, "Results", "/results");
 
-  const user = userEvent.setup();
+  render(<App />);
 
-  // Click the header nav link and await the route transition.
-  await user.click(screen.getByRole("link", { name: "Results" }));
-
-  // Results page header should render immediately after navigation.
+  // Wait for Results route to render (Layout and AuthProvider effects may schedule updates).
   expect(await screen.findByRole("heading", { name: "Results" })).toBeInTheDocument();
 
-  // Empty state (no active attempt selected / no results).
+  // "Attempt details" is the title shown when no attempt is selected.
   expect(await screen.findByText("Attempt details")).toBeInTheDocument();
-  expect(screen.getByText(/Select an attempt to review answers\./i)).toBeInTheDocument();
+
+  // Stable empty-state assertion (subtitle + alert content).
+  expect(await screen.findByText(/Select an attempt to review answers\./i)).toBeInTheDocument();
+  expect(await screen.findByText(/Choose an attempt from the list to see which answers were wrong\./i)).toBeInTheDocument();
+
+  // Optional: confirm nav link exists and works without flaking.
+  const user = userEvent.setup();
+  await user.click(screen.getByRole("link", { name: "Quizzes" }));
+  expect(await screen.findByText("Categories")).toBeInTheDocument();
 });
