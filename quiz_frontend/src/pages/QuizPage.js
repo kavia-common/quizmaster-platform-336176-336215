@@ -127,18 +127,44 @@ export default function QuizPage() {
         await completeAttempt(attempt.attemptId);
       }
 
+      // Persist enough detail for a rich results review UI:
+      // - question text
+      // - selected answer text
+      // - correct answer text
+      // - whether it was correct
+      const detailedAnswers = questions.map((q) => {
+        const questionId = q.id || q.questionId;
+        const record = nextAttempt.answers?.[String(questionId)];
+
+        const options = q.answers || q.options || [];
+        const selected = options.find(o => String(o.id ?? o.value ?? o.key) === String(record?.answerId));
+        const correct = options.find(o => String(o.id ?? o.value ?? o.key) === String(q.correctAnswerId));
+
+        return {
+          questionId: String(questionId),
+          questionText: q.text || q.prompt || "",
+          selectedAnswerId: record?.answerId !== undefined ? String(record.answerId) : "",
+          selectedAnswerText: selected ? (selected.text ?? selected.label ?? String(selected.value ?? selected.id)) : "",
+          correctAnswerId: q.correctAnswerId !== undefined ? String(q.correctAnswerId) : "",
+          correctAnswerText: correct ? (correct.text ?? correct.label ?? String(correct.value ?? correct.id)) : "",
+          wasCorrect: record?.wasCorrect === true
+        };
+      });
+
       const result = {
         id: `${quizId}:${Date.now()}`,
         quizId,
         title: quizState.title,
         total: questions.length,
         score: nextScore,
-        takenAt: new Date().toISOString()
+        takenAt: new Date().toISOString(),
+        // New: richer per-question review payload for Results page
+        answers: detailedAnswers
       };
       persistLatestResult(result);
       navigate("/results", { replace: true });
     }
-  }, [attempt, currentQuestion, navigate, questions.length, quizId, quizState.title, submitting]);
+  }, [attempt, currentQuestion, navigate, questions, quizId, quizState.title, submitting]);
 
   const progressText = useMemo(() => {
     if (quizState.status !== "ready") return "";

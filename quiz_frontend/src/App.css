@@ -272,6 +272,35 @@ a:hover { text-decoration: underline; }
 .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .rowActions { display: flex; gap: 8px; justify-content: flex-end; }
 
+/* Results review UX */
+.resultRow {
+  border: 1px solid var(--border);
+  background: rgba(17, 24, 39, 0.02);
+}
+.resultRow:hover { background: rgba(59, 130, 246, 0.06); border-color: rgba(59, 130, 246, 0.25); }
+.resultRow.active { background: rgba(59, 130, 246, 0.10); border-color: rgba(59, 130, 246, 0.35); }
+
+.reviewList { display: grid; gap: 10px; }
+.reviewItem {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px;
+  background: rgba(255,255,255,0.95);
+}
+.reviewItem.wrong { border-color: rgba(239, 68, 68, 0.35); background: rgba(239, 68, 68, 0.04); }
+.reviewItem.correct { border-color: rgba(6, 182, 212, 0.35); background: rgba(6, 182, 212, 0.04); }
+
+.reviewQ { font-weight: 900; margin-bottom: 10px; }
+.reviewNum { color: var(--muted); margin-right: 6px; }
+
+.reviewA { display: grid; grid-template-columns: 140px 1fr; gap: 10px; margin-top: 6px; }
+@media (max-width: 520px) { .reviewA { grid-template-columns: 1fr; } }
+
+.reviewLabel { color: var(--muted); font-size: 13px; font-weight: 800; }
+.reviewValue { font-weight: 800; }
+.reviewValue.wrong { color: rgba(239, 68, 68, 1); }
+.reviewValue.correct { color: rgba(6, 182, 212, 1); }
+
 .statRow { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .stat {
   border: 1px solid var(--border);
