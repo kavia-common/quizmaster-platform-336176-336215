@@ -9,23 +9,48 @@
  */
 
 import { requestJson } from "./httpClient";
+import {
+  mockAdminListQuestions,
+  mockGetQuiz,
+  mockListCategories,
+  mockListQuizzesByCategory
+} from "./mockData";
+
+/**
+ * Determines whether we should fall back to mock data.
+ * We fall back when:
+ * - backend call failed due to config/network, or
+ * - backend returned non-ok.
+ *
+ * This keeps pages simple: they keep calling quizApi, and quizApi makes
+ * best-effort to serve usable data.
+ */
+function shouldFallbackToMock(res) {
+  return !res?.ok;
+}
 
 // PUBLIC_INTERFACE
 export async function listCategories() {
-  /** Returns a list of quiz categories. */
-  return requestJson("/categories");
+  /** Returns a list of quiz categories. Falls back to mock dataset on failure. */
+  const res = await requestJson("/categories");
+  if (shouldFallbackToMock(res)) return mockListCategories();
+  return res;
 }
 
 // PUBLIC_INTERFACE
 export async function listQuizzesByCategory(categoryId) {
-  /** Returns a list of quizzes in a category. */
-  return requestJson("/quizzes", { query: { categoryId } });
+  /** Returns a list of quizzes in a category. Falls back to mock dataset on failure. */
+  const res = await requestJson("/quizzes", { query: { categoryId } });
+  if (shouldFallbackToMock(res)) return mockListQuizzesByCategory(categoryId);
+  return res;
 }
 
 // PUBLIC_INTERFACE
 export async function getQuiz(quizId) {
-  /** Returns quiz details including questions (if backend provides). */
-  return requestJson(`/quizzes/${encodeURIComponent(quizId)}`);
+  /** Returns quiz details including questions (if backend provides). Falls back to mock dataset on failure. */
+  const res = await requestJson(`/quizzes/${encodeURIComponent(quizId)}`);
+  if (shouldFallbackToMock(res)) return mockGetQuiz(quizId);
+  return res;
 }
 
 // PUBLIC_INTERFACE
@@ -73,8 +98,10 @@ export async function getMe(token) {
 
 // PUBLIC_INTERFACE
 export async function adminListQuestions(token, quizId) {
-  /** Lists questions (optionally by quiz). */
-  return requestJson("/admin/questions", { token, query: { quizId } });
+  /** Lists questions (optionally by quiz). Falls back to mock dataset on failure. */
+  const res = await requestJson("/admin/questions", { token, query: { quizId } });
+  if (shouldFallbackToMock(res)) return mockAdminListQuestions(quizId);
+  return res;
 }
 
 // PUBLIC_INTERFACE
