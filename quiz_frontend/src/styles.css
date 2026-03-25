@@ -99,11 +99,41 @@ a {
   color: var(--text);
 }
 
+.navLinkActive {
+  background: rgba(59, 130, 246, 0.12);
+  color: var(--text);
+  box-shadow: 0 0 0 3px var(--ring);
+}
+
 .main {
   flex: 1;
   display: flex;
   justify-content: center;
   padding: 28px 16px 40px;
+}
+
+.content {
+  width: 100%;
+  max-width: 980px;
+}
+
+.page {
+  width: 100%;
+  padding: 22px;
+}
+
+.pageTitle {
+  margin: 0;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+}
+
+.pageBody {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.6;
+  max-width: 70ch;
 }
 
 .hero {
