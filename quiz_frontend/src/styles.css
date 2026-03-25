@@ -112,9 +112,108 @@ a {
   padding: 28px 16px 40px;
 }
 
+.layout {
+  width: 100%;
+  max-width: 980px;
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
 .content {
   width: 100%;
   max-width: 980px;
+}
+
+.sidebar {
+  position: sticky;
+  top: 84px; /* 64px top bar + a bit of spacing */
+  align-self: start;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(6px);
+  overflow: hidden;
+}
+
+.sidebarHeader {
+  padding: 16px 16px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebarTitleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.sidebarTitle {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.sidebarBadge {
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(17, 24, 39, 0.75);
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(59, 130, 246, 0.10);
+}
+
+.sidebarSubtitle {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.sidebarNav {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.sidebarLink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 10px;
+  border-radius: 12px;
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.sidebarLink:hover {
+  background: rgba(59, 130, 246, 0.08);
+  color: var(--text);
+}
+
+.sidebarLinkActive {
+  background: rgba(59, 130, 246, 0.12);
+  color: var(--text);
+  box-shadow: 0 0 0 3px var(--ring);
+}
+
+.sidebarLinkDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--primary), var(--success));
+  box-shadow: 0 6px 12px rgba(59, 130, 246, 0.18);
+  flex: 0 0 auto;
+}
+
+.sidebarLinkText {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .page {
@@ -215,6 +314,15 @@ a {
 }
 
 @media (max-width: 860px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: relative;
+    top: auto;
+  }
+
   .cardRow {
     grid-template-columns: 1fr;
   }

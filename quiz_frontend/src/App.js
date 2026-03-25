@@ -1,6 +1,7 @@
 import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
+import CategoriesSidebar from "./components/CategoriesSidebar";
 import Home from "./pages/Home";
 import Categories from "./pages/Categories";
 import Admin from "./pages/Admin";
@@ -20,15 +21,19 @@ function App() {
       <Header />
 
       <main className="main">
-        <div className="content">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/categories" element={<Categories />} />
-            <Route path="/admin" element={<Admin />} />
+        <div className="layout">
+          <CategoriesSidebar />
 
-            {/* Canonical behavior for unknown routes */}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
+          <div className="content">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/categories" element={<Categories />} />
+              <Route path="/admin" element={<Admin />} />
+
+              {/* Canonical behavior for unknown routes */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </div>
         </div>
       </main>
 
