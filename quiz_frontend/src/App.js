@@ -5,6 +5,7 @@ import CategoriesSidebar from "./components/CategoriesSidebar";
 import Home from "./pages/Home";
 import Categories from "./pages/Categories";
 import Admin from "./pages/Admin";
+import QuizRunner from "./pages/QuizRunner";
 
 /**
  * App routing flow contract:
@@ -28,6 +29,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/categories" element={<Categories />} />
+              <Route path="/quiz" element={<QuizRunner />} />
               <Route path="/admin" element={<Admin />} />
 
               {/* Canonical behavior for unknown routes */}

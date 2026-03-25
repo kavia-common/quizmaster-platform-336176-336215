@@ -42,6 +42,14 @@ export default function Header() {
           className={({ isActive }) =>
             `navLink${isActive ? " navLinkActive" : ""}`
           }
+          to="/quiz"
+        >
+          Quiz
+        </NavLink>
+        <NavLink
+          className={({ isActive }) =>
+            `navLink${isActive ? " navLinkActive" : ""}`
+          }
           to="/admin"
         >
           Admin
